@@ -1,0 +1,7 @@
+
+.todo
+.DS_Store
+__pycache__/
+
+*.rtf
+*.txt
