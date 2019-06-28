@@ -5,37 +5,37 @@
 
 import math
 
-# the following function finds all of the configurations for the given graph
+# the following function finds all of the configurations for the given graph size
 # the output is a list of dictionaries
 # for now we assume a path graph
-def findConfigurationsForGraph(Graph):
-    tmpConfig = Graph.copy()
+def findConfigurationsForGraphSize(size):
+    tmpConfig = {}
     configList = []
     tmpList = []
     rowList = []
     listOneTwo = {1:2, 2:1}
 
     # obtain the length of the graph
-    graphSize = len(Graph)
+    # graphSize = len(Graph) # no longer depends on the graph
 
     # set row to 1
     # set vertex to the last vertex index in the graph
     # set maximum number of rows for the configuration
     row = 1
-    vertex = graphSize
-    maxRows = math.pow(2, graphSize-1)
+    vertex = size
+    maxRows = math.pow(2, size-1)
     printRows = maxRows
 
-    # print(graphSize)
+    # print(size)
     # print(maxRows)
 
-    if graphSize < 1:
+    if size < 1:
         return {1:0}
-    elif graphSize == 2:
+    elif size == 2:
         return [{1:0, 2:1}, {1:0, 2:2}]
-    else: # graphSize == 3+
+    else: # size == 3+
         # initialize the temporary configuration to zero
-        for vertex in Graph:
+        for vertex in range(1, size+1):
             tmpConfig[vertex] = 0
         
         repeatFactor = 1
@@ -74,10 +74,10 @@ def findConfigurationsForGraph(Graph):
         # print(maxRows)
         # print(rowList)
         row = 1
-        vertex = graphSize
+        vertex = size
         while row < maxRows+1: # loop over each row
             while vertex > 1: # loop over the number of vertices
-                tmpConfig[vertex] = rowList[graphSize-vertex][row-1]
+                tmpConfig[vertex] = rowList[size-vertex][row-1]
                 vertex -= 1
             
             # save the newly built configuration into the master configuration list
@@ -85,7 +85,7 @@ def findConfigurationsForGraph(Graph):
             # update the row index
             # print(tmpConfig)
             configList.append(tmpConfig.copy())
-            vertex = graphSize
+            vertex = size
             row += 1
     
     # print(configList)
@@ -124,7 +124,7 @@ G = {1:[2], 2:[1,3], 3:[2,4], 4:[3]}
 # Configuration
 C = {1:0, 2:1, 3:1, 4:1}
 
-foundConfigurations = findConfigurationsForGraph(G)
+foundConfigurations = findConfigurationsForGraphSize(4)
 
 for config in foundConfigurations:
     # print(config)
