@@ -130,13 +130,3 @@ def makeGraph(size):
     
     # print(graph)
     return graph
-
-# Graph of P_4
-G = {1:[2], 2:[1,3], 3:[2,4], 4:[3]}
-# Configuration
-C = {1:0, 2:1, 3:1, 4:1}
-
-foundConfigurations = findConfigurationsForGraphSize(4)
-
-for config in foundConfigurations:
-    prettyPrintConfiguration(config)
