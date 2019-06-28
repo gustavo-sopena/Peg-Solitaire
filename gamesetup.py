@@ -106,19 +106,27 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
     return configList
 
 # the following function will generate a graph of a given size
-# for now, it is a path graph
-def makeGraph(size):
+# graph can be of type: path or circle
+def makeGraph(size, type):
+    if size == 1:
+        return {1:[1]}
+    if size == 2:
+        return {1:[2], 2:[1]}
+
     index = 1
     graph = {}
     edges = []
     while index < size+1:
-        if index == 1:
-            if size == 1:
-                edges.append(1)
-            else:
-                edges.append(index+1)
-        elif index == size:
+        if index == 1 and type == 'path':
+            edges.append(index+1)
+        elif index == 1 and type == 'circle':
+            edges.append(size)
+            edges.append(index+1)
+        elif index == size and type == 'path':
             edges.append(index-1)
+        elif index == size and type == 'circle':
+            edges.append(index-1)
+            edges.append(1)
         else:
             edges.append(index-1)
             edges.append(index+1)
