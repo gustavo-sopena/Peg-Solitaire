@@ -5,6 +5,13 @@
 
 import math
 
+# the following function prints the given configuration without brackets
+def prettyPrintConfiguration(configuration):
+    for vertex in configuration:
+        pegColor = configuration[vertex]
+        print(str(pegColor)+" ", end="")
+    print("")
+
 # the following function finds all of the configurations for the given graph size
 # the output is a list of dictionaries
 # for now we assume a path graph
@@ -132,8 +139,4 @@ C = {1:0, 2:1, 3:1, 4:1}
 foundConfigurations = findConfigurationsForGraphSize(4)
 
 for config in foundConfigurations:
-    # print(config)
-    for vertex in config:
-        pegColor = config[vertex]
-        print(str(pegColor)+" ", end="")
-    print("")
+    prettyPrintConfiguration(config)
