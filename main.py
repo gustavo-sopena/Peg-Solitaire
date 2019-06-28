@@ -6,11 +6,10 @@
 import PegGame
 import gamesetup
 
-# Graph of C_5
-G = {1:[5,2], 2:[1,3], 3:[2,4], 4:[3,5], 5:[4,1]}
+size = 3
+G = gamesetup.makeGraph(size, 'circle')
 
 wonGames = 0
-size = 5
 gameIndex = 1
 for zeroPosition in range(1, size+1):
     configurations = gamesetup.findConfigurationsForGraphSize(size, zeroPosition)
