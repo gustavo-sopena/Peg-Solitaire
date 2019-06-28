@@ -8,7 +8,7 @@ import math
 # the following function finds all of the configurations for the given graph size
 # the output is a list of dictionaries
 # for now we assume a path graph
-def findConfigurationsForGraphSize(size):
+def findConfigurationsForGraphSize(size, zeroPosition=1):
     tmpConfig = {}
     configList = []
     tmpList = []
@@ -75,9 +75,13 @@ def findConfigurationsForGraphSize(size):
         # print(rowList)
         row = 1
         vertex = size
+        offset = 0
         while row < maxRows+1: # loop over each row
             while vertex > 1: # loop over the number of vertices
-                tmpConfig[vertex] = rowList[size-vertex][row-1]
+                if vertex == zeroPosition: # check if there should be a zero in this vertex
+                    offset = 1
+                
+                tmpConfig[vertex-offset] = rowList[size-vertex][row-1]
                 vertex -= 1
             
             # save the newly built configuration into the master configuration list
@@ -87,6 +91,7 @@ def findConfigurationsForGraphSize(size):
             configList.append(tmpConfig.copy())
             vertex = size
             row += 1
+            offset = 0
     
     # print(configList)
     # for config in configList:
