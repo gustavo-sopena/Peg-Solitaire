@@ -5,36 +5,65 @@
 
 import PegGame
 import gamesetup
+import xlsxwriter
 
 size = 3
-G = gamesetup.makeGraph(size, 'circle')
+type = 'circle'
+G = gamesetup.makeGraph(size, type)
+fileName = 'peg-solitaire'+'-'+type+'-'+str(size)+'-'+'z3'+'.xlsx'
+print("Saving to file: "+fileName)
 
+workbook = xlsxwriter.Workbook(fileName)
+worksheet = workbook.add_worksheet()
+bold = workbook.add_format({'bold':True})
+boldright = workbook.add_format({'align':'right', 'bold':True})
+
+row = 0
 wonGames = 0
 gameIndex = 1
 for zeroPosition in range(1, size+1):
     configurations = gamesetup.findConfigurationsForGraphSize(size, zeroPosition)
 
     for config in configurations:
-        print("Game: "+str(gameIndex))
-        gamesetup.prettyPrintConfiguration(config)
-        print("")
+        worksheet.write(row, 0, "Game", bold)
+        worksheet.write(row, 1, gameIndex, bold)
+        row += 1
 
+        # show current game (not sure if needed)
+        # if so, update the row index
+        # gamesetup.writeConfigurationToSheet(config, row, worksheet)
+
+        # play the game
         result, graph, sequence, seen = PegGame.winnable(G, config, [], [])
-        print("Did Win: "+str(result))
-        for c in sequence:
-            gamesetup.prettyPrintConfiguration(c)
+        worksheet.write(row, 0, "Win", bold)
+        worksheet.write(row, 1, str(result), boldright)
+        row += 1
 
-        print("")
-        print("Seen List")
+        # show series of moves that won the game, if any
+        for c in sequence:
+            gamesetup.writeConfigurationToSheet(c, row, worksheet)
+            row += 1
+
+        # show the games that the program found while playing
+        worksheet.write(row, 0, "Seen List")
+        row += 1
         for c in seen:
-            gamesetup.prettyPrintConfiguration(c)
-        print("")
+            gamesetup.writeConfigurationToSheet(c, row, worksheet)
+            row += 1
 
         if result == True:
             wonGames += 1
 
         gameIndex += 1
+        row += 1
 
-print("Total Games: "+str(gameIndex-1))
-print("Won Games: "+str(wonGames))
-print("Lost Games: "+str(gameIndex-wonGames-1))
+worksheet.write(row, 0, "Total")
+worksheet.write(row, 1, gameIndex-1)
+row += 1
+worksheet.write(row, 0, "Won")
+worksheet.write(row, 1, wonGames)
+row += 1
+worksheet.write(row, 0, "Lost")
+worksheet.write(row, 1, gameIndex-wonGames-1)
+
+workbook.close()

@@ -12,6 +12,12 @@ def prettyPrintConfiguration(configuration):
         print(str(pegColor)+" ", end="")
     print("")
 
+# the following function writes the given configuration to an xlsx file
+def writeConfigurationToSheet(configuration, row, worksheet):
+    for vertex in configuration:
+        pegColor = configuration[vertex]
+        worksheet.write(row, vertex-1, pegColor)
+
 # the following function finds all of the configurations for the given graph size
 # the output is a list of dictionaries
 # for now we assume a path graph
