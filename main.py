@@ -29,9 +29,9 @@ for zeroPosition in range(1, size+1):
         worksheet.write(row, 1, gameIndex, bold)
         row += 1
 
-        # show current game (not sure if needed)
-        # if so, update the row index
-        # gamesetup.writeConfigurationToSheet(config, row, worksheet)
+        # show current game, update the row index
+        gamesetup.writeConfigurationToSheet(config, row, worksheet)
+        row += 1
 
         # play the game
         result, graph, sequence, seen = PegGame.winnable(G, config, [], [])
@@ -45,11 +45,11 @@ for zeroPosition in range(1, size+1):
             row += 1
 
         # show the games that the program found while playing
-        worksheet.write(row, 0, "Seen List")
-        row += 1
-        for c in seen:
-            gamesetup.writeConfigurationToSheet(c, row, worksheet)
-            row += 1
+        # worksheet.write(row, 0, "Seen List")
+        # row += 1
+        # for c in seen:
+        #     gamesetup.writeConfigurationToSheet(c, row, worksheet)
+        #     row += 1
 
         if result == True:
             wonGames += 1
@@ -59,11 +59,16 @@ for zeroPosition in range(1, size+1):
 
 worksheet.write(row, 0, "Total")
 worksheet.write(row, 1, gameIndex-1)
+print("Total: "+str(gameIndex-1))
 row += 1
+
 worksheet.write(row, 0, "Won")
 worksheet.write(row, 1, wonGames)
+print("Won: "+str(wonGames))
 row += 1
+
 worksheet.write(row, 0, "Lost")
 worksheet.write(row, 1, gameIndex-wonGames-1)
+print("Lost: "+str(gameIndex-wonGames-1))
 
 workbook.close()
