@@ -1,15 +1,15 @@
-# name: main (driver)
-# description: Python Driver file for playing Peg Solitaire
+# name: configuration
+# description: Python file for playing Peg Solitaire with all possible configurations in Z_n
 # author: Gustavo Sopena
 # date started: Friday: June 28, 2019
 
 import PegGame
-import gamesetup
+import setup
 import xlsxwriter
 
 size = 3
 type = 'circle'
-G = gamesetup.makeGraph(size, type)
+G = setup.makeGraph(size, type)
 fileName = 'peg-solitaire'+'-'+type+'-'+str(size)+'-'+'z3'+'.xlsx'
 print("Saving to file: "+fileName)
 
@@ -22,7 +22,7 @@ row = 0
 wonGames = 0
 gameIndex = 1
 for zeroPosition in range(1, size+1):
-    configurations = gamesetup.findConfigurationsForGraphSize(size, zeroPosition)
+    configurations = setup.findConfigurationsForGraphSize(size, zeroPosition)
 
     for config in configurations:
         worksheet.write(row, 0, "Game", bold)
@@ -30,7 +30,7 @@ for zeroPosition in range(1, size+1):
         row += 1
 
         # show current game, update the row index
-        gamesetup.writeConfigurationToSheet(config, row, worksheet)
+        setup.writeConfigurationToSheet(config, row, worksheet)
         row += 1
 
         # play the game
@@ -41,14 +41,14 @@ for zeroPosition in range(1, size+1):
 
         # show series of moves that won the game, if any
         for c in sequence:
-            gamesetup.writeConfigurationToSheet(c, row, worksheet)
+            setup.writeConfigurationToSheet(c, row, worksheet)
             row += 1
 
         # show the games that the program found while playing
         # worksheet.write(row, 0, "Seen List")
         # row += 1
         # for c in seen:
-        #     gamesetup.writeConfigurationToSheet(c, row, worksheet)
+        #     setup.writeConfigurationToSheet(c, row, worksheet)
         #     row += 1
 
         if result == True:
