@@ -1,5 +1,5 @@
-# name: main
-# description: Python Script that acts as a helper file for Peg Solitaire Research
+# name: setup
+# description: Python Script that contains helper functions to play Peg Solitaire
 # author: Gustavo Sopena
 # date started: Friday: June 21, 2019
 
@@ -67,7 +67,7 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
                     tmpList.append(listOneTwo[which])
                     index += 1
                 
-                # update the row index
+                # increase the row index
                 row += 1
             
             # reduce the vertex by 1
@@ -99,7 +99,7 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
             
             # save the newly built configuration into the master configuration list
             # reset vertex to the number of vertices
-            # update the row index
+            # increase the row index
             # print(tmpConfig)
             configList.append(tmpConfig.copy())
             vertex = size
