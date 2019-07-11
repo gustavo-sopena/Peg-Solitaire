@@ -6,6 +6,7 @@
 import PegGame
 import setup
 import xlsxwriter
+import math
 
 size = 3
 type = 'circle'
@@ -18,10 +19,13 @@ worksheet = workbook.add_worksheet()
 bold = workbook.add_format({'bold':True})
 boldright = workbook.add_format({'align':'right', 'bold':True})
 
+maxGames = math.pow(2, size-1)
+halfGames = maxGames / 2
+
 row = 0
 wonGames = 0
 gameIndex = 1
-for zeroPosition in range(1, size+1):
+for zeroPosition in range(1, 2):
     configurations = setup.findConfigurationsForGraphSize(size, zeroPosition)
 
     for config in configurations:
@@ -57,9 +61,18 @@ for zeroPosition in range(1, size+1):
         gameIndex += 1
         row += 1
 
+        # check if we played half of the games
+        if gameIndex == halfGames + 1:
+            break
+
 worksheet.write(row, 0, "Total")
+worksheet.write(row, 1, maxGames)
+print("Total: "+str(int(maxGames)))
+row += 1
+
+worksheet.write(row, 0, "Played")
 worksheet.write(row, 1, gameIndex-1)
-print("Total: "+str(gameIndex-1))
+print("Played: "+str(gameIndex-1))
 row += 1
 
 worksheet.write(row, 0, "Won")
