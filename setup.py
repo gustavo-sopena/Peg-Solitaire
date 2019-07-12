@@ -26,17 +26,19 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
     configList = []
     tmpList = []
     rowList = []
-    listOneTwo = {1:2, 2:1}
 
     # obtain the length of the graph
     # graphSize = len(Graph) # no longer depends on the graph
 
+    # set the color set to use
+    # e.g., Z-3 = (0, 1, 2)
     # set row to 1
     # set vertex to the last vertex index in the graph
     # set maximum number of rows for the configuration
+    n = 3
     row = 1
     vertex = size
-    maxRows = math.pow(2, size-1)
+    maxRows = math.pow(n-1, size-1)
     printRows = maxRows
 
     # print(size)
@@ -52,23 +54,23 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
             tmpConfig[vertex] = 0
         
         repeatFactor = 1
-        which = 1
         while vertex > 0: # loop over the number of vertices
+            which = 1
             while row < printRows+1: # loop over each row
-                if which % 2 == 1:
-                    which = 2
-                elif which % 2 == 0:
+                which = which % n
+                if which == 0:
                     which = 1
 
                 # check how many times we have to print the current number
                 index = 0
                 while index < repeatFactor:
                     # print(listOneTwo[which])
-                    tmpList.append(listOneTwo[which])
+                    tmpList.append(which)
                     index += 1
                 
                 # increase the row index
                 row += 1
+                which += 1
             
             # reduce the vertex by 1
             # reset the row to 1
@@ -78,7 +80,7 @@ def findConfigurationsForGraphSize(size, zeroPosition=1):
             # reset the temporary list
             vertex -= 1
             row = 1
-            repeatFactor *= 2
+            repeatFactor *= n-1
             printRows /= 2
             rowList.append(tmpList)
             tmpList = []
