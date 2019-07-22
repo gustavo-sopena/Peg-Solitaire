@@ -146,3 +146,38 @@ def makeGraph(size, type):
     
     # print(graph)
     return graph
+
+# G = {1:[2, 3, 4, 5, 6, 7], 2:[1], 3:[1], 4:[1], 5:[1], 6:[1], 7:[1, 8, 9, 10, 11, 12], 8:[7], 9:[7], 10:[7], 11:[7], 12:[7]}
+def makeDoubleStarGraph(leftSize, rightSize):
+    if leftSize == 0 and rightSize == 0:
+        return {1: [2], 2: [1]}
+
+    root = 1
+    graph = {}
+    edges = []
+    totalVertices = leftSize + rightSize + 2
+    
+    vertex = 1
+    while vertex < totalVertices+1: # loop over all vertices
+        if vertex == 1: # left root
+            index = 2
+            while index < leftSize+2+1: # loop through the number of vertices on the left side graph + 1 for right neighbor
+                edges.append(index)
+                index += 1
+        elif vertex == leftSize + 2: # right root
+            edges.append(1)
+            index = leftSize + 2 + 1
+            while index < leftSize+rightSize+2+1: # loop through the number of vertices on the left side graph + 1 for left neighbor
+                edges.append(index)
+                index += 1
+            root = leftSize + 2
+        else:
+            edges = [root]
+        
+        kv = {vertex:edges}
+        graph.update(kv)
+        edges = []
+        vertex += 1
+    
+    # print(graph)
+    return graph
