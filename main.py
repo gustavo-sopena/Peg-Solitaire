@@ -4,7 +4,7 @@
 # date started: Thursday: July 5, 2019
 
 import PegGame
-import setup
+import factory
 import xlsxwriter
 # import math
 
@@ -16,7 +16,7 @@ import xlsxwriter
 n = 3
 size = 8
 type = 'circle'
-G = setup.makeGraph(size, type)
+G = factory.makeGraph(size, type)
 
 # set the configuration for the graph
 C = {1:0, 2:2, 3:1, 4:1, 5:1, 6:2, 7:1, 8:2}
@@ -43,7 +43,7 @@ worksheet.write(row, 1, 0, bold)
 row += 1
 
 # show the current game
-setup.writeConfigurationToSheet(C, row, worksheet)
+factory.writeConfigurationToSheet(C, row, worksheet)
 row += 1
 
 # play the game
@@ -56,17 +56,17 @@ worksheet.write(row, 1, str(result), boldright)
 row += 1
 
 # optional: show the starting state
-# setup.prettyPrintConfiguration(C)
+# factory.prettyPrintConfiguration(C)
 
 # show series of moves that won the game, if any
 for c in sequence:
-    setup.prettyPrintConfiguration(c)
-    setup.writeConfigurationToSheet(c, row, worksheet)
+    factory.prettyPrintConfiguration(c)
+    factory.writeConfigurationToSheet(c, row, worksheet)
     row += 1
 
 # show the games that the program saw while playing
 # print("Seen List")
 # for c in seen:
-#     setup.prettyPrintConfiguration(c)
+#     factory.prettyPrintConfiguration(c)
 
 workbook.close()

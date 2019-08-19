@@ -4,11 +4,11 @@
 # date started: Friday: June 28, 2019
 
 import PegGame
-import setup
+import factory
 import xlsxwriter
 import math
 
-# set the color set to use, match this in setup.py and PegGame.py as well
+# set the color set to use, match this in factory.py and PegGame.py as well
 # e.g., Z_3 = (0, 1, 2)
 # set the number of vertices for the graph (int)
 # set the type of graph (string)
@@ -16,7 +16,7 @@ import math
 n = 3
 size = 3
 type = 'circle'
-G = setup.makeGraph(size, type)
+G = factory.makeGraph(size, type)
 
 # the configuration, C, does not need to set manually
 # they are going to found automatically
@@ -46,7 +46,7 @@ wonGames = 0
 gameIndex = 1
 for zeroPosition in range(1, size+1):
     # find the configurations based on the zero positions
-    configurations = setup.findConfigurationsForGraphSize(size, zeroPosition)
+    configurations = factory.findConfigurationsForGraphSize(size, zeroPosition)
 
     for config in configurations:
         # write a header-like row in the excel file for the current game
@@ -55,7 +55,7 @@ for zeroPosition in range(1, size+1):
         row += 1
 
         # show current game, update the row index
-        setup.writeConfigurationToSheet(config, row, worksheet)
+        factory.writeConfigurationToSheet(config, row, worksheet)
         row += 1
 
         # play the game
@@ -68,14 +68,14 @@ for zeroPosition in range(1, size+1):
 
         # show series of moves that won the game, if any
         for c in sequence:
-            setup.writeConfigurationToSheet(c, row, worksheet)
+            factory.writeConfigurationToSheet(c, row, worksheet)
             row += 1
 
         # show the games that the program found while playing
         # worksheet.write(row, 0, "Seen List")
         # row += 1
         # for c in seen:
-        #     setup.writeConfigurationToSheet(c, row, worksheet)
+        #     factory.writeConfigurationToSheet(c, row, worksheet)
         #     row += 1
 
         # if the game is winnable, then increase counter
