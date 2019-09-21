@@ -181,3 +181,32 @@ def makeDoubleStarGraph(leftSize, rightSize):
     
     # print(graph)
     return graph
+
+# the following function will generate windmill graphs
+# the function takes as parameter the number of blades on the graph
+def makeWindmillGraph(bladeSize):
+    totalVertexCount = bladeSize * 2 + 1
+
+    root = 1
+    graph = {}
+    edges = []
+    
+    vertex = 1
+    while vertex < totalVertexCount+1: # loop over all vertices
+        if vertex == 1: # root
+            index = 2
+            while index < totalVertexCount+1: # loop through the total number of vertices on the graph
+                edges.append(index)
+                index += 1
+        elif vertex % 2 == 0: # even vertex
+            edges = [root, vertex+1]
+        elif vertex % 2 == 1: # even vertex
+            edges = [root, vertex-1]
+        
+        kv = {vertex:edges}
+        graph.update(kv)
+        edges = []
+        vertex += 1
+    
+    # print(graph)
+    return graph
