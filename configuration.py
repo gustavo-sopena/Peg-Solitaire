@@ -7,16 +7,32 @@ import PegGame
 import factory
 import xlsxwriter
 import math
+import argparse
 
-# set the color set to use, match this in factory.py and PegGame.py as well
-# e.g., Z_3 = (0, 1, 2)
-# set the number of vertices for the graph (int)
-# set the type of graph (string)
-# for now, options are: circle, path
-n = 3
-size = 3
-type = 'circle'
-G = factory.makeGraph(size, type)
+# setup the argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar'], required=True)
+parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
+parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
+parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
+parser.add_argument('--rightSize', type=int, help="the number of vertices for the right side of the double star graph", metavar='R', default=0)
+parser.add_argument('--bladeCount', type=int, help="the number of blades for the windmill graph", metavar='B', default=1)
+args = parser.parse_args()
+
+# set the desired type of graph
+# set the desired size of graph
+# set the desired color set, e.g., Z_3 = (0, 1, 2)
+type = args.type
+n = PegGame.n = args.colorset
+if type == 'path' or 'circle':
+    size = args.size
+    G = factory.makeGraph(size, type)
+if type == 'windmill':
+    size = args.bladeCount * 2 + 1
+    G = factory.makeWindmillGraph(args.bladeCount)
+if type == 'doublestar':
+    size = args.leftSize + args.rightSize + 2
+    G = factory.makeDoubleStarGraph(args.leftSize, args.rightSize)
 
 # the configuration, C, does not need to set manually
 # they are going to found automatically
@@ -46,7 +62,7 @@ wonGames = 0
 gameIndex = 1
 for zeroPosition in range(1, size+1):
     # find the configurations based on the zero positions
-    configurations = factory.findConfigurationsForGraphSize(size, zeroPosition)
+    configurations = factory.findConfigurationsForGraphSizeAndColor(size, n, zeroPosition)
 
     for config in configurations:
         # write a header-like row in the excel file for the current game

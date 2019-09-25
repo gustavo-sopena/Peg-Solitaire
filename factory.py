@@ -18,24 +18,17 @@ def writeConfigurationToSheet(configuration, row, worksheet):
         pegColor = configuration[vertex]
         worksheet.write(row, vertex-1, pegColor)
 
-# the following function finds all of the configurations for the given graph size
+# the following function finds all of the configurations for the given graph size and color set
 # the output is a list of dictionaries
-# for now we assume a path graph
-def findConfigurationsForGraphSize(size, zeroPosition=1):
+def findConfigurationsForGraphSizeAndColor(size, n, zeroPosition=1):
     tmpConfig = {}
     configList = []
     tmpList = []
     rowList = []
 
-    # obtain the length of the graph
-    # graphSize = len(Graph) # no longer depends on the graph
-
-    # set the color set to use
-    # e.g., Z-3 = (0, 1, 2)
     # set row to 1
     # set vertex to the last vertex index in the graph
     # set maximum number of rows for the configuration
-    n = 3
     row = 1
     vertex = size
     maxRows = math.pow(n-1, size-1)
@@ -184,8 +177,8 @@ def makeDoubleStarGraph(leftSize, rightSize):
 
 # the following function will generate windmill graphs
 # the function takes as parameter the number of blades on the graph
-def makeWindmillGraph(bladeSize):
-    totalVertexCount = bladeSize * 2 + 1
+def makeWindmillGraph(bladeCount):
+    totalVertexCount = bladeCount * 2 + 1
 
     root = 1
     graph = {}

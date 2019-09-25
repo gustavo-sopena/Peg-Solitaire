@@ -51,9 +51,9 @@ Set these parameters to the desired value in either main<span></span>.py or conf
 
 ### Example - Main
 
-Suppose a game is played with three colors on a path graph with five vertices.
+Suppose a game is played on a path graph with five vertices with three colors.
 
-* `size`, `type`, `G`, and `C` are set as follows in main<span></span>.py
+* `type`, `size`, `G`, and `C` are set as follows in main<span></span>.py
 * `n` is set to the same value in main<span></span>.py and in PegGame<span></span>.py
 ```
 n = 3
@@ -81,18 +81,32 @@ If the game is winnable, as in this case, then the resulting excel file will con
 
 ### Example - Configuration
 
-Suppose the same parameters are involved. This time, however, the configuration is not chosen and `n` is set to the same value in configuration<span></span>.py, factory<span></span>.py, and PegGame<span></span>.py.
+Suppose the same parameters are involved. This time, however, the configuration is not chosen.
 
-The program will play all configurations on the given graph. That is, the program will find all possible arrangement of pegs based on the number of colors chosen. Running the file produces the following result.
+The program will play all configurations on the given graph. That is, the program will find all possible arrangement of pegs based on the number of colors chosen. To indicate the desired parameters, pass them as arguments when running the file.
 ```
-$ python3 configuration.py
+$ python3 configuration.py --type path --size 5 --colorset 3
 Saving to file: peg-solitaire-configuration-sheet-path-5-z3.xlsx
+Total: 80
+Played: 80
+Won: 42
+Lost: 38
 ```
 Similar to the result in "example - main", if the games are winnable, then the resulting excel file will contain the steps on how to win.
 
+Use the `-h` or `--help` arguments for a compact view of the parameters.
+```
+$ python3 configuration.py --help
+```
+**Note:** If a parameter is omitted, then it will be set to a default value. For example, if the `--colorset` parameter is not specified, then internally, `n = 3`.
+
 ### Graphs
 
-In the above examples, we can define graphs by using the `makeGraph(size, type)` function from factory<span></span>.py.
+Graphs are made by using the appropriate function from factory<span></span>.py:
+
+* `makeGraph(size, type)` function for a path or circle graph
+* `makeWindmillGraph(bladeCount)` function for a windmill graph
+* `makeDoubleStarGraph(leftSize, rightSize)` function for a double star graph
 
 For example,
 ```
@@ -102,9 +116,17 @@ G = factory.makeGraph(size, type)
 ```
 This creates a path graph with ten vertices.
 
-For a more complex graph, use the `makeDoubleStarGraph(leftSize, rightSize)` function from factory<span></span>.py, where `leftSize` and `rightSize` represent the number of vertices for the left and right sides, respectively. The `makeWindmillGraph(bladeSize)` function from factory<span></span>.py, where `bladeSize` represents the number of blades for the graph, can also be used.
+**Note:** `size` is automatically calculated for a windmill and double star graph.
 
-**Note:** `size` for a double star graph is `leftSize + rightSize + 2`; for the windmill graph, it is `bladeSize * 2 + 1`.
+## Contributing
+
+If you want to contribute:
+
+* Fork this repository and create a local clone
+* Develop your edits in a new branch and commit
+* Push your commit to your fork
+
+Then, submit a pull request!
 
 ## TODO
 

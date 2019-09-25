@@ -14,12 +14,12 @@ import xlsxwriter
 # set the type of graph (string)
 # for now, options are: circle, path
 n = 3
-size = 8
-type = 'circle'
+size = 5
+type = 'path'
 G = factory.makeGraph(size, type)
 
 # set the configuration for the graph
-C = {1:0, 2:2, 3:1, 4:1, 5:1, 6:2, 7:1, 8:2}
+C = {1:0, 2:1, 3:1, 4:1, 5:1}
 
 # create the file name for this game
 # warning: if a file with the same name exists, it will override that file
