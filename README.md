@@ -141,7 +141,8 @@ Then, submit a pull request!
 
 * As excel files are saved to the project directory, new excel files with the same name as a file already in the directory will replace the old excel file
 
-* As the number of colors and/or graph size increases, the program might take a long time to play a game or may not be able to play at all and show a `RecursionError: maximum recursion depth exceeded in comparison` message
+* As the number of colors and/or graph size increases, the program might take a long time to play a game or may not be able to play at all and show a `RecursionError: maximum recursion depth exceeded in comparison` message;
+When running configuration<span></span>.py, the `--limit` option can be used to increase the number of recursions
 
 ## Acknowledgments
 

@@ -8,6 +8,7 @@ import factory
 import xlsxwriter
 import math
 import argparse
+import sys
 
 # setup the argument parser
 parser = argparse.ArgumentParser()
@@ -17,6 +18,7 @@ parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0,
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
 parser.add_argument('--rightSize', type=int, help="the number of vertices for the right side of the double star graph", metavar='R', default=0)
 parser.add_argument('--bladeCount', type=int, help="the number of blades for the windmill graph", metavar='B', default=1)
+parser.add_argument('--limit', type=int, help="the number of recursions allowed", metavar='m', default=1000)
 args = parser.parse_args()
 
 # set the desired type of graph
@@ -37,8 +39,10 @@ if type == 'doublestar':
 # the configuration, C, does not need to set manually
 # they are going to found automatically
 
+# set recursion limit
 # create the file name for this game
 # warning: if a file with the same name exists, it will override that file
+sys.setrecursionlimit(args.limit)
 fileName = 'peg-solitaire-configuration-sheet'+'-'+type+'-'+str(size)+'-'+'z'+str(n)+'.xlsx'
 print("Saving to file: "+fileName)
 
