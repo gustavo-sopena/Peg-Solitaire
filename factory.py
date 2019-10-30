@@ -4,6 +4,8 @@
 # date started: Friday: June 21, 2019
 
 import math
+import time
+import contextlib
 
 # the following function prints the given configuration without brackets
 def prettyPrintConfiguration(configuration):
@@ -203,3 +205,13 @@ def makeWindmillGraph(bladeCount):
     
     # print(graph)
     return graph
+
+# the following function will time how long a block of code took to execute
+@contextlib.contextmanager
+def stopwatch():
+    t0 = time.time()
+    try:
+        yield
+    finally:
+        t1 = time.time()
+        print('Time elapsed: %.3f hours = %.3f minutes = %.3f seconds' % ((t1 - t0)/3600, (t1 - t0)/60, t1 - t0))
