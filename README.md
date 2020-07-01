@@ -47,7 +47,7 @@ The following parameters are used to play the game.
 
     **Note:** `C` is defined to have one empty vertex and is usually the first vertex.
 
-Set these parameters to the desired value in either main<span></span>.py or configuration<span></span>.py.
+Set these parameters to the desired value in main<span></span>.py.
 
 ### Example - Main
 
@@ -81,24 +81,76 @@ If the game is winnable, as in this case, then the resulting excel file will con
 
 ### Example - Configuration
 
-Suppose the same parameters are involved. This time, however, the configuration is not chosen.
+Suppose the same parameters are involved. This time, however, the configuration is not directly chosen.
 
-The program will play all configurations on the given graph. That is, the program will find all possible arrangement of pegs based on the number of colors chosen. To indicate the desired parameters, pass them as arguments when running the file.
+First, in running configuration<span></span>.py, to indicate the desired parameters, pass them as arguments as shown in the example below.
+Now, the program will play all configurations on the given graph.
+That is, the program will find all possible arrangement of pegs based on the graph size and the number of colors chosen.
+By using the `--range` argument, the program will play the specified subset of games.
+Valid values are between `1` and `Total` (inclusive).
+
+The total number of games can be referenced from the output of the `--dry-run` argument.
+This will have the program simulate playing the game with the specified parameters and show possible results.
+
+Finally, similar to the result in "example - main", if the games are winnable, then the generated excel file will contain the steps on how to win.
+
+**Note:** If a parameter is omitted, then it will be set to a default value. For example, if the `--colorset` parameter is not specified, then internally, `n = 3`.
+
+#### Results Screen
+
+Here is the output when running configuration<span></span>.py.
+
 ```
 $ python3 configuration.py --type path --size 5 --colorset 3
-Saving to file: peg-solitaire-configuration-sheet-path-5-z3.xlsx
+Generating File: ps-p(5)-z(3)-r[1-80].xlsx
+
+Processing:
+Configuration Section (1): Playing... Done.
+Configuration Section (2): Playing... Done.
+Configuration Section (3): Playing... Done.
+Configuration Section (4): Playing... Done.
+Configuration Section (5): Playing... Done.
+
+Calculating Time... Done.
+Saving xlsx File... Done.
+
+Statistics:
+Time: 0.000 hours = 0.000 minutes = 0.025 seconds
 Total: 80
 Played: 80
 Won: 42
 Lost: 38
+Size: 5
+Span: 16
+Sections: 5
 ```
-Similar to the result in "example - main", if the games are winnable, then the resulting excel file will contain the steps on how to win.
+The generated excel file will contain the statistics from the output in the form of the table below.
+|Total|Played|Won|Lost|Size|Span|Sections|Time (h)|Time (m)|Time (s)|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|80|80|42|38|5|16|5|0.000|0.000|0.025|
 
-Use the `-h` or `--help` arguments for a compact view of the parameters.
+* Total - the number of games available to play for the given graph size and the number of colors
+* Played - the number of games played (obtained from `--range` or Total)
+* Won - the number of games determined to be winnable
+* Lost - the number of games determined to be not winnable
+* Size - the number of vertices for the graph
+* Span - the number of games per section
+* Sections - the number of configuration sets (a group based on the graph size and the number of colors)
+* Time - the number of hours, minutes, and seconds the program played the game
+
+In addition, the file name is in a compact form by default.
+Use the `-e` argument to switch to a descriptive form.
+
+|Compact|Descriptive|
+| --- | --- |
+|`ps-p(5)-z(3)-r[1-80].xlsx`|`peg-solitaire-path(5)-colorset(3)-range[1-80].xlsx`|
+
+#### Help
+
+Use the `-h` or `--help` arguments for a view of all arguments.
 ```
 $ python3 configuration.py --help
 ```
-**Note:** If a parameter is omitted, then it will be set to a default value. For example, if the `--colorset` parameter is not specified, then internally, `n = 3`.
 
 ### Graphs
 
@@ -116,7 +168,7 @@ G = factory.makeGraph(size, type)
 ```
 This creates a path graph with ten vertices.
 
-**Note:** `size` is automatically calculated for a windmill and double star graph.
+**Note:** Size is automatically calculated for a windmill and double star graph.
 
 ## Contributing
 
@@ -139,10 +191,12 @@ Then, submit a pull request!
 
 ### Bugs + Issues
 
-* As excel files are saved to the project directory, new excel files with the same name as a file already in the directory will replace the old excel file
+* As excel files are saved to the project directory, new excel files, added as a result from the program, will replace the old excel file
 
-* As the number of colors and/or graph size increases, the program might take a long time to play a game or may not be able to play at all and show a `RecursionError: maximum recursion depth exceeded in comparison` message;
-When running configuration<span></span>.py, the `--limit` option can be used to increase the number of recursions
+* As the number of colors and/or graph size increases, the program might take a long time to play a game or may not be able to play at all and throw a `RecursionError: maximum recursion depth exceeded in comparison` exception;
+In running configuration<span></span>.py, if the error occurs, the program will safely exit, generating the excel file with any games played up to that point
+
+* Increasing the number of recursions may cause python to use a lot of memory or cause other unforeseen issues
 
 ## Acknowledgments
 

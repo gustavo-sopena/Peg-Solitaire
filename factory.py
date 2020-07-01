@@ -1,4 +1,4 @@
-# name: setup
+# name: factory
 # description: Python Script that contains helper functions to play Peg Solitaire
 # author: Gustavo Sopena
 # date started: Friday: June 21, 2019
@@ -19,6 +19,13 @@ def writeConfigurationToSheet(configuration, row, worksheet):
     for vertex in configuration:
         pegColor = configuration[vertex]
         worksheet.write(row, vertex-1, pegColor)
+
+# the following function makes the format object for the excel file
+def makeSheetCellFormat(workbook, *styles):
+    style = {}
+    for s in styles:
+        style.update(s)
+    return workbook.add_format(style)
 
 # the following function finds all of the configurations for the given graph size and color set
 # the output is a list of dictionaries
@@ -207,11 +214,18 @@ def makeWindmillGraph(bladeCount):
     return graph
 
 # the following function will time how long a block of code took to execute
+# the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
-def stopwatch():
+def stopwatch(timesheet, align):
     t0 = time.time()
     try:
         yield
     finally:
         t1 = time.time()
-        print('Time elapsed: %.3f hours = %.3f minutes = %.3f seconds' % ((t1 - t0)/3600, (t1 - t0)/60, t1 - t0))
+        timesheet.write(0, 7, "Time (h)")
+        timesheet.write(0, 8, "Time (m)")
+        timesheet.write(0, 9, "Time (s)")
+        timesheet.write(1, 7, "%.3f" % ((t1 - t0) / 3600), align)
+        timesheet.write(1, 8, "%.3f" % ((t1 - t0) / 60), align)
+        timesheet.write(1, 9, "%.3f" % (t1 - t0), align)
+        print("Time: %.3f hours = %.3f minutes = %.3f seconds" % ((t1 - t0) / 3600, (t1 - t0) / 60, t1 - t0))
