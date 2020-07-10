@@ -85,7 +85,7 @@ Suppose the same parameters are involved. This time, however, the configuration 
 
 First, in running configuration<span></span>.py, to indicate the desired parameters, pass them as arguments as shown in the example below.
 Now, the program will play all configurations on the given graph.
-That is, the program will find all possible arrangement of pegs based on the graph size and the number of colors chosen.
+That is, the program will build all possible arrangement of pegs based on the graph size and the number of colors chosen.
 By using the `--range` argument, the program will play the specified subset of games.
 Valid values are between `1` and `Total` (inclusive).
 

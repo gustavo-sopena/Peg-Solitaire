@@ -50,9 +50,6 @@ if typeDescriptive == 'doublestar':
     sizeDescription = str(args.leftSize)+'-'+str(args.rightSize)
     G = factory.makeDoubleStarGraph(args.leftSize, args.rightSize)
 
-# the configuration, C, does not need to set manually
-# they are going to be found automatically
-
 # set the total number of games
 totalGames = int(math.pow(n-1, size-1)) * size
 
@@ -159,26 +156,26 @@ with factory.stopwatch(worksheet, workbook.add_format(right)):
             # 'a' should not be the right endpoint of the section
             # 'b' should not be the left endpoint of the section
             alpha = a % gamesPerSection
-            alpha = alpha - 1 if alpha != 0 else alpha
+            alpha = alpha if alpha != 0 else alpha
             beta = b % gamesPerSection
             beta = beta if beta != 0 else gamesPerSection
         elif zeroPosition == startingZeroPosition:
             # 'a' can be the right endpoint of the section
             alpha = a % gamesPerSection
-            alpha = alpha - 1 if alpha != 0 else gamesPerSection - 1
+            alpha = alpha if alpha != 0 else gamesPerSection
             beta = gamesPerSection
         elif zeroPosition == endingZeroPosition:
             # 'b' can be the left endpoint of the section
-            alpha = 0
+            alpha = 1
             beta = b % gamesPerSection
             beta = beta if beta != 0 else gamesPerSection
         else:
-            alpha = 0
+            alpha = 1
             beta = gamesPerSection
 
         # find the configurations based on the zero position
         print("Configuration Section ({}): ".format(currentSection), end="", flush=True)
-        configurations = factory.findConfigurationsForGraphSizeAndColor(size, n, zeroPosition)[alpha:beta]
+        configurations = factory.buildConfigurations(size, n, zeroPosition, alpha, beta)
 
         print("Playing... ", end="", flush=True)
         for config in configurations:

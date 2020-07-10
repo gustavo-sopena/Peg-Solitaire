@@ -27,92 +27,66 @@ def makeSheetCellFormat(workbook, *styles):
         style.update(s)
     return workbook.add_format(style)
 
-# the following function finds all of the configurations for the given graph size and color set
-# the output is a list of dictionaries
-def findConfigurationsForGraphSizeAndColor(size, n, zeroPosition=1):
+# the following function builds all of the configurations for the given graph size and color set
+def buildConfigurations(size, n, zero=1, alpha=0, beta=0):
+    if size <= 1:
+        return {1:0}
+
     tmpConfig = {}
     configList = []
     tmpList = []
     rowList = []
 
-    # set row to 1
-    # set vertex to the last vertex index in the graph
-    # set maximum number of rows for the configuration
-    row = 1
+    # set current vertex to the last vertex in the graph
+    # set maximum number of games
+    # build all of the configurations if alpha and beta are not specified
     vertex = size
-    maxRows = math.pow(n-1, size-1)
-    printRows = maxRows
+    games = math.pow(n-1, size-1)
+    alpha = 1 if alpha == 0 or alpha < 0 else alpha
+    beta = games if beta == 0 or beta > games else beta
+    alpha = 1 if alpha > beta else alpha
+    beta = games if alpha > beta else beta
 
-    # print(size)
-    # print(maxRows)
+    # print("size: {}".format(size))
+    # print("colorset: {}".format(n))
+    # print("zero position: {}".format(zero))
+    # print("games: {}".format(games))
+    # print("alpha: {}".format(alpha))
+    # print("beta: {}".format(beta))
 
-    if size < 1:
-        return {1:0}
-    elif size == 2:
-        return [{1:0, 2:1}, {1:0, 2:2}]
-    else: # size == 3+
-        # initialize the temporary configuration to zero
+    # size >= 2
+    repeatFactor = 1
+    repeatIndex = 0
+
+    # loop over each vertex, then loop over each row
+    while vertex > 1:
+        color = 1
+        for row in range(1, beta+1):
+            color = 1 if color % n == 0 else color
+            if row >= alpha:
+                tmpList.append(color)
+
+            color = color if repeatIndex < repeatFactor-1 else color+1
+            repeatIndex = repeatIndex+1 if repeatIndex < repeatFactor-1 else 0
+            repeatIndex = 0 if row == beta else repeatIndex
+
+        vertex -= 1
+        repeatFactor *= n-1
+        rowList.append(tmpList)
+        tmpList = []
+
+    # loop over each row, then loop over each vertex
+    for row in range(1, beta-alpha+1+1):
+        offset = 1
         for vertex in range(1, size+1):
-            tmpConfig[vertex] = 0
-        
-        repeatFactor = 1
-        while vertex > 0: # loop over the number of vertices
-            which = 1
-            while row < printRows+1: # loop over each row
-                which = which % n
-                if which == 0:
-                    which = 1
+            if vertex == zero:
+                offset = 0
+                tmpConfig[vertex] = 0
+            else:
+                tmpConfig[vertex] = rowList[size-vertex-offset][row-1]
 
-                # check how many times we have to print the current number
-                index = 0
-                while index < repeatFactor:
-                    # print(listOneTwo[which])
-                    tmpList.append(which)
-                    index += 1
-                
-                # increase the row index
-                row += 1
-                which += 1
-            
-            # reduce the vertex by 1
-            # reset the row to 1
-            # double the repeat factor
-            # half the number of max rows
-            # save the temporary list into the master row list
-            # reset the temporary list
-            vertex -= 1
-            row = 1
-            repeatFactor *= n-1
-            printRows /= 2
-            rowList.append(tmpList)
-            tmpList = []
-            # print("rf: "+str(repeatFactor))
-        
-        # print(maxRows)
-        # print(rowList)
-        row = 1
-        vertex = size
-        offset = 0
-        while row < maxRows+1: # loop over each row
-            while vertex > 1: # loop over the number of vertices
-                if vertex == zeroPosition: # check if there should be a zero in this vertex
-                    offset = 1
-                
-                tmpConfig[vertex-offset] = rowList[size-vertex][row-1]
-                vertex -= 1
-            
-            # save the newly built configuration into the master configuration list
-            # reset vertex to the number of vertices
-            # increase the row index
-            # print(tmpConfig)
-            configList.append(tmpConfig.copy())
-            vertex = size
-            row += 1
-            offset = 0
+        configList.append(tmpConfig.copy())
     
-    # print(configList)
-    # for config in configList:
-    #     print(config)
     return configList
 
 # the following function will generate a graph of a given size
