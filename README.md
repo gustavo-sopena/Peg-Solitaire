@@ -54,7 +54,7 @@ Set these parameters to the desired value in main<span></span>.py.
 Suppose a game is played on a path graph with five vertices with three colors.
 
 * `type`, `size`, `G`, and `C` are set as follows in main<span></span>.py
-* `n` is set to the same value in main<span></span>.py and in PegGame<span></span>.py
+* `n` is set to the same value in main<span></span>.py and in game<span></span>.py
 ```
 n = 3
 size = 5

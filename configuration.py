@@ -3,7 +3,7 @@
 # author: Gustavo Sopena
 # date started: Friday: June 28, 2019
 
-import PegGame
+import game
 import factory
 import xlsxwriter
 import math
@@ -28,7 +28,7 @@ args = parser.parse_args()
 # set the desired size of graph
 # set the desired color set, e.g., Z_3 = (0, 1, 2)
 typeDescriptive = args.type
-n = PegGame.n = args.colorset
+n = game.n = args.colorset
 if typeDescriptive == 'path':
     size = args.size
     typeCompact = 'p'
@@ -194,7 +194,7 @@ with factory.stopwatch(worksheet, workbook.add_format(right)):
 
             # play the game
             try:
-                result, graph, sequence, seen = PegGame.winnable(G, config, [], [])
+                result, graph, sequence, seen = game.winnable(G, config, [], [])
             except RecursionError:
                 # break from playing other games if a recursion error occurs (for now)
                 recursionError = True
