@@ -6,7 +6,6 @@
 import game
 import factory
 import xlsxwriter
-import math
 import argparse
 import sys
 
@@ -51,7 +50,7 @@ if typeDescriptive == 'doublestar':
     G = factory.makeDoubleStarGraph(args.leftSize, args.rightSize)
 
 # set the total number of games
-totalGames = int(math.pow(n-1, size-1)) * size
+totalGames = ((n-1) ** (size-1)) * size
 
 # every zero position defines a section with a fixed number of games
 gamesPerSection = int(totalGames / size)

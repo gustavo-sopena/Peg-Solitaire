@@ -3,7 +3,6 @@
 # author: Gustavo Sopena
 # date started: Friday: June 21, 2019
 
-import math
 import time
 import contextlib
 
@@ -41,7 +40,7 @@ def buildConfigurations(size, n, zero=1, alpha=0, beta=0):
     # set maximum number of games
     # build all of the configurations if alpha and beta are not specified
     vertex = size
-    games = math.pow(n-1, size-1)
+    games = (n-1) ** (size-1)
     alpha = 1 if alpha == 0 or alpha < 0 else alpha
     beta = games if beta == 0 or beta > games else beta
     alpha = 1 if alpha > beta else alpha
