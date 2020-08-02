@@ -18,7 +18,6 @@ parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0,
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
 parser.add_argument('--rightSize', type=int, help="the number of vertices for the right side of the double star graph", metavar='R', default=0)
 parser.add_argument('--bladeCount', type=int, help="the number of blades for the windmill graph", metavar='B', default=1)
-parser.add_argument('--limit', type=int, help="the number of recursions allowed", metavar='m', default=1000)
 parser.add_argument('--range', type=int, nargs=2, help="the numbered games to play: [a, b]", metavar=('a','b'))
 parser.add_argument('--dry-run', action="store_true", help="simulate playing the game")
 args = parser.parse_args()
@@ -89,10 +88,8 @@ else:
     startingZeroPosition = 1
     endingZeroPosition = size
 
-# set recursion limit
 # create the file name for this game
 # warning: if a file with the same name exists, it will override that file
-sys.setrecursionlimit(args.limit)
 fileName = "{}-ti({})-zi({})-ri[{}-{}].xlsx"
 if args.e:
     fileName = fileName.format('peg-solitaire', sizeDescription, n, a, b)
@@ -145,7 +142,6 @@ row = 3
 wonGames = 0
 lostGames = 0
 gameIndex = a
-recursionError = False
 with factory.stopwatch(worksheet, workbook.add_format(right)):
     print("Processing:")
     for zeroPosition in range(startingZeroPosition, endingZeroPosition+1):
@@ -188,18 +184,11 @@ with factory.stopwatch(worksheet, workbook.add_format(right)):
             factory.writeConfigurationToSheet(config, row, worksheet)
             row += 1
 
-            # on this row in the excel file: show whether the game was winnable or failed to determined
+            # format the 'win' row
             worksheet.write(row, 0, "Win", workbook.add_format(bold))
 
             # play the game
-            try:
-                result, graph, sequence, seen = game.winnable(G, config, [], [])
-            except RecursionError:
-                # break from playing other games if a recursion error occurs (for now)
-                recursionError = True
-                worksheet.write(row, 4, "Failed To Determine: Recursion Error", factory.makeSheetCellFormat(workbook, bold, right))
-                row += 2
-                break
+            result, sequence, seen = game.is_winnable(G, config)
 
             # show if the game won
             worksheet.write(row, 1, str(result), factory.makeSheetCellFormat(workbook, bold, right))
@@ -228,7 +217,7 @@ with factory.stopwatch(worksheet, workbook.add_format(right)):
             row += 1
 
         currentSection += 1
-        print("Done.") if recursionError != True else print("Failed To Determine: Recursion Error.")
+        print("Done.")
 
     print("")
     print("Calculating Time... Done.")

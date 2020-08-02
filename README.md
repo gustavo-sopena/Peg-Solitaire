@@ -193,10 +193,7 @@ Then, submit a pull request!
 
 * As excel files are saved to the project directory, new excel files, added as a result from the program, will replace the old excel file
 
-* As the number of colors and/or graph size increases, the program might take a long time to play a game or may not be able to play at all and throw a `RecursionError: maximum recursion depth exceeded in comparison` exception;
-In running configuration<span></span>.py, if the error occurs, the program will safely exit, generating the excel file with any games played up to that point
-
-* Increasing the number of recursions may cause python to use a lot of memory or cause other unforeseen issues
+* As the number of colors and/or graph size increases, the program might take a long time to play a game and use a lot of memory, which may cause other unforeseen issues
 
 ## Acknowledgments
 
