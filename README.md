@@ -159,6 +159,7 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeGraph(size, type)` function for a path or circle graph
 * `makeWindmillGraph(bladeCount)` function for a windmill graph
 * `makeDoubleStarGraph(leftSize, rightSize)` function for a double star graph
+* `makeCaterpillarGraph(pendants)` function for a caterpillar graph
 
 For example,
 ```
@@ -168,7 +169,7 @@ G = factory.makeGraph(size, type)
 ```
 This creates a path graph with ten vertices.
 
-**Note:** Size is automatically calculated for a windmill and double star graph.
+**Note:** Size is automatically calculated for a windmill, double star, and caterpillar graph.
 
 ## Contributing
 

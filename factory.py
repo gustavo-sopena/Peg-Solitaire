@@ -186,6 +186,22 @@ def makeWindmillGraph(bladeCount):
     # print(graph)
     return graph
 
+# the following function generates a caterpillar graph
+def makeCaterpillarGraph(pendants):
+    size = len(pendants)
+    graph = makeGraph(size, 'path')
+
+    index = size
+    for vertex in range(1, size+1):
+        for i in range(1, pendants[vertex-1] + 1):
+            index += 1
+            graph[vertex].append(index)
+            kv = {index:[vertex]}
+            graph.update(kv)
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
