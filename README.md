@@ -156,20 +156,22 @@ $ python3 configuration.py --help
 
 Graphs are made by using the appropriate function from factory<span></span>.py:
 
-* `makeGraph(size, type)` function for a path or circle graph
+* `makePathGraph(size)` function for a path graph
+* `makeCircleGraph(size)` function for a circle graph
 * `makeWindmillGraph(bladeCount)` function for a windmill graph
 * `makeDoubleStarGraph(leftSize, rightSize)` function for a double star graph
 * `makeCaterpillarGraph(pendants)` function for a caterpillar graph
+* `makeLollipopGraph(completeSize, stemSize)` for a lollipop graph
+* `makeCompleteGraph(size)` for a complete graph
 
 For example,
 ```
 size = 10
-type = 'path'
-G = factory.makeGraph(size, type)
+G = factory.makePathGraph(size)
 ```
 This creates a path graph with ten vertices.
 
-**Note:** Size is automatically calculated for a windmill, double star, and caterpillar graph.
+**Note:** Size is automatically calculated for a windmill, double star, caterpillar, and a lollipop graph.
 
 ## Contributing
 

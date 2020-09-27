@@ -12,13 +12,14 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
 parser.add_argument('--rightSize', type=int, help="the number of vertices for the right side of the double star graph", metavar='R', default=0)
 parser.add_argument('--bladeCount', type=int, help="the number of blades for the windmill graph", metavar='B', default=1)
 parser.add_argument('--pendants', type=int, nargs='+', help="the list of pendants for the caterpillar graph", metavar='p', default=[0, 0, 0])
+parser.add_argument('--stemSize', type=int, help="the number of vertices for the stem of the lollipop graph", metavar='m', default=1)
 parser.add_argument('--range', type=int, nargs=2, help="the numbered games to play: [a, b]", metavar=('a','b'))
 parser.add_argument('--dry-run', action="store_true", help="simulate playing the game")
 args = parser.parse_args()
@@ -32,12 +33,12 @@ if typeDescriptive == 'path':
     size = args.size
     typeCompact = 'p'
     sizeDescription = size
-    G = factory.makeGraph(size, typeDescriptive)
+    G = factory.makePathGraph(args.size)
 if typeDescriptive == 'circle':
     size = args.size
     typeCompact = 'c'
     sizeDescription = size
-    G = factory.makeGraph(size, typeDescriptive)
+    G = factory.makeCircleGraph(args.size)
 if typeDescriptive == 'windmill':
     size = args.bladeCount * 2 + 1
     typeCompact = 'w'
@@ -53,6 +54,16 @@ if typeDescriptive == 'caterpillar':
     typeCompact = 'cp'
     sizeDescription = str(args.pendants).replace('[', '').replace(']', '').replace(', ', '-')
     G = factory.makeCaterpillarGraph(args.pendants)
+if typeDescriptive == 'lollipop':
+    size = args.size + args.stemSize
+    typeCompact = 'lp'
+    sizeDescription = str(args.size)+'-'+str(args.stemSize)
+    G = factory.makeLollipopGraph(args.size, args.stemSize)
+if typeDescriptive == 'complete':
+    size = args.size
+    typeCompact = 'k'
+    sizeDescription = size
+    G = factory.makeCompleteGraph(args.size)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size

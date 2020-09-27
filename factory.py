@@ -85,44 +85,74 @@ def buildConfigurations(size, n, zero=1, alpha=0, beta=0):
                 tmpConfig[vertex] = rowList[size-vertex-offset][row-1]
 
         configList.append(tmpConfig.copy())
-    
+
     return configList
 
-# the following function will generate a graph of a given size
-# graph can be of type: path or circle
-def makeGraph(size, type):
+# the following function generates a path graph
+# the second argument specifies the index to which the graph starts labeling
+def makePathGraph(size, start=1):
     if size == 1:
-        return {1:[1]}
-    if size == 2:
-        return {1:[2], 2:[1]}
+        return {start:[start+1], start+1:[start]}
 
-    index = 1
+    vertex = start
     graph = {}
     edges = []
-    while index < size+1:
-        if index == 1 and type == 'path':
-            edges.append(index+1)
-        elif index == 1 and type == 'circle':
-            edges.append(size)
-            edges.append(index+1)
-        elif index == size and type == 'path':
-            edges.append(index-1)
-        elif index == size and type == 'circle':
-            edges.append(index-1)
-            edges.append(1)
+    while vertex < start+size:
+        if vertex == start:
+            edges.append(vertex+1)
+        elif vertex == start+size-1:
+            edges.append(vertex-1)
         else:
-            edges.append(index-1)
-            edges.append(index+1)
-        
-        kv = {index:edges}
+            edges.append(vertex-1)
+            edges.append(vertex+1)
+
+        kv = {vertex:edges}
         graph.update(kv)
         edges = []
-        index += 1
-    
+        vertex += 1
+
     # print(graph)
     return graph
 
-# G = {1:[2, 3, 4, 5, 6, 7], 2:[1], 3:[1], 4:[1], 5:[1], 6:[1], 7:[1, 8, 9, 10, 11, 12], 8:[7], 9:[7], 10:[7], 11:[7], 12:[7]}
+# the following function generates a circle graph
+def makeCircleGraph(size, start=1):
+    if size == 1 or size == 2:
+        return {start:[start+1], start+1:[start]}
+
+    graph = makePathGraph(size, start)
+
+    graph[start].append(size+start-1)
+    graph[size+start-1].append(start)
+
+    # print(graph)
+    return graph
+
+# the folllowing function generates a complete graph
+def makeCompleteGraph(size):
+    graph = makeCircleGraph(size)
+
+    # connect each vertex on the circle to one another
+    vertex = 1
+    connectVertex = 3
+    diagonals = size - 3
+
+    if diagonals > 0:
+        while vertex < size+1:
+            for start in range(0, diagonals):
+                graph[vertex].append(connectVertex)
+                connectVertex += 1
+                connectVertex = 1 if connectVertex == (size+1) else connectVertex
+
+            for start in range(0, size-4):
+                connectVertex -= 1
+                connectVertex = size if connectVertex == 0 else connectVertex
+
+            vertex += 1
+
+    # print(graph)
+    return graph
+
+# the following function generates a double star graph
 def makeDoubleStarGraph(leftSize, rightSize):
     if leftSize == 0 and rightSize == 0:
         return {1: [2], 2: [1]}
@@ -157,7 +187,7 @@ def makeDoubleStarGraph(leftSize, rightSize):
     # print(graph)
     return graph
 
-# the following function will generate windmill graphs
+# the following function will generates a windmill graph
 # the function takes as parameter the number of blades on the graph
 def makeWindmillGraph(bladeCount):
     totalVertexCount = bladeCount * 2 + 1
@@ -189,7 +219,7 @@ def makeWindmillGraph(bladeCount):
 # the following function generates a caterpillar graph
 def makeCaterpillarGraph(pendants):
     size = len(pendants)
-    graph = makeGraph(size, 'path')
+    graph = makePathGraph(size)
 
     index = size
     for vertex in range(1, size+1):
@@ -198,6 +228,36 @@ def makeCaterpillarGraph(pendants):
             graph[vertex].append(index)
             kv = {index:[vertex]}
             graph.update(kv)
+
+    # print(graph)
+    return graph
+
+# the following function generates a lollipop graph
+def makeLollipopGraph(completeSize, stemSize):
+    if completeSize == 1 and stemSize == 1:
+        return {1: [2], 2: [1]}
+
+    complete = makeCompleteGraph(completeSize)
+
+    if stemSize == 0:
+        return complete
+
+    path = makePathGraph(stemSize, completeSize+1)
+
+    # remove the extra node on the complete graph or path graph on size one
+    if completeSize == 1:
+        complete.pop(completeSize+1)
+    if stemSize == 1:
+        path.pop(completeSize+2)
+        path[completeSize+1].remove(completeSize+2)
+
+    # do not append an extra node to the first node on size one
+    if completeSize != 1:
+        complete[1].append(completeSize+1)
+
+    path[completeSize+1].append(1)
+
+    graph = {**complete, **path}
 
     # print(graph)
     return graph
