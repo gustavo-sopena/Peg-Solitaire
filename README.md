@@ -191,6 +191,9 @@ Then, submit a pull request!
 
     * Tree Graphs
     * (Complete) Bipartite Graphs
+    * House Graphs
+    * Mongolian Tent Graphs
+    * Petersen Graphs
 
 ### Bugs + Issues
 
