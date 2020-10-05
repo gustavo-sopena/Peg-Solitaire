@@ -163,6 +163,8 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeCaterpillarGraph(pendants)` function for a caterpillar graph
 * `makeLollipopGraph(completeSize, stemSize)` for a lollipop graph
 * `makeCompleteGraph(size)` for a complete graph
+* `makeHouseGraph()` for a house graph
+* `makeHouseXGraph()` for a house-x graph
 
 For example,
 ```
@@ -191,7 +193,6 @@ Then, submit a pull request!
 
     * Tree Graphs
     * (Complete) Bipartite Graphs
-    * House Graphs
     * Mongolian Tent Graphs
     * Petersen Graphs
 

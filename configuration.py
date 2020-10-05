@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -64,6 +64,16 @@ if typeDescriptive == 'complete':
     typeCompact = 'k'
     sizeDescription = size
     G = factory.makeCompleteGraph(args.size)
+if typeDescriptive == 'house':
+    size = 5
+    typeCompact = 'h'
+    sizeDescription = 5
+    G = factory.makeHouseGraph()
+if typeDescriptive == 'house-x':
+    size = 5
+    typeCompact = 'hx'
+    sizeDescription = 5
+    G = factory.makeHouseXGraph()
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size

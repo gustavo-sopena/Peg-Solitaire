@@ -262,6 +262,32 @@ def makeLollipopGraph(completeSize, stemSize):
     # print(graph)
     return graph
 
+# the following function generates a house graph
+def makeHouseGraph():
+    graph = makeCircleGraph(5)
+
+    graph[5].append(2)
+    graph[2].append(5)
+
+    # print(graph)
+    return graph
+
+# the following function generates a house x-graph
+def makeHouseXGraph():
+    graph = makeCircleGraph(5)
+
+    graph[5].append(2)
+    graph[2].append(5)
+
+    graph[2].append(4)
+    graph[4].append(2)
+
+    graph[3].append(5)
+    graph[5].append(3)
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
