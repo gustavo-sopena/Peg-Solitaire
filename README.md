@@ -165,6 +165,8 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeCompleteGraph(size)` for a complete graph
 * `makeHouseGraph()` for a house graph
 * `makeHouseXGraph()` for a house-x graph
+* `makeGridGraph(row, column)` for a grid graph
+* `makeMongolianTentGraph(row, column)` for a mongolian tent graph
 
 For example,
 ```
@@ -193,7 +195,6 @@ Then, submit a pull request!
 
     * Tree Graphs
     * (Complete) Bipartite Graphs
-    * Mongolian Tent Graphs
     * Petersen Graphs
 
 ### Bugs + Issues

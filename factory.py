@@ -288,6 +288,68 @@ def makeHouseXGraph():
     # print(graph)
     return graph
 
+# the following function generates a grid graph
+def makeGridGraph(row, column, start=1):
+    if row == 1 or column == 1:
+        raise ValueError
+
+    graph = {}
+
+    pRow = None
+    cRow = None
+
+    # create the variable that we can use to update the vertex label for each row
+    vertexUpdate = column
+
+    # create the first row
+    mRow = makePathGraph(column, start)
+
+    # add the first row to the graph
+    graph.update(mRow)
+
+    # loop over the row count
+    for i in range(2, row+1):
+        # set the previous row to the first row
+        if i == 2:
+            pRow = mRow
+        else:
+            pRow = cRow
+
+        cRow = makePathGraph(column, start+vertexUpdate)
+
+        # loop over the column count
+        for v in cRow:
+            cRow[v].append(v-column)
+            pRow[v-column].append(v)
+
+        vertexUpdate += column
+
+        graph.update(cRow)
+
+    # print(graph)
+    return graph
+
+# the following function generates a mongolian tent graph
+def makeMongolianTentGraph(row, column):
+    if row < 2 or column < 3:
+        raise ValueError
+    if column % 2 == 0:
+        raise ValueError
+
+    graph = makeGridGraph(row, column, 2)
+
+    # the extra vertex (vertex 1) connects to the even vertices of the first row
+    vertex = {1:[]}
+
+    for v in range(2, column+2, 2):
+        vertex[1].append(v)
+        graph[v].append(1)
+
+    graph.update(vertex)
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
