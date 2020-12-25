@@ -128,24 +128,24 @@ def makeCircleGraph(size, start=1):
     return graph
 
 # the folllowing function generates a complete graph
-def makeCompleteGraph(size):
-    graph = makeCircleGraph(size)
+def makeCompleteGraph(size, start=1):
+    graph = makeCircleGraph(size, start)
 
     # connect each vertex on the circle to one another
-    vertex = 1
-    connectVertex = 3
+    vertex = start
+    connectVertex = 3 + (start - 1)
     diagonals = size - 3
 
     if diagonals > 0:
-        while vertex < size+1:
-            for start in range(0, diagonals):
+        while vertex < size+start:
+            for s in range(0, diagonals):
                 graph[vertex].append(connectVertex)
                 connectVertex += 1
-                connectVertex = 1 if connectVertex == (size+1) else connectVertex
+                connectVertex = start if connectVertex == (size+start) else connectVertex
 
-            for start in range(0, size-4):
+            for s in range(0, size-4):
                 connectVertex -= 1
-                connectVertex = size if connectVertex == 0 else connectVertex
+                connectVertex = size+start-1 if connectVertex == (start-1) else connectVertex
 
             vertex += 1
 
@@ -153,60 +153,60 @@ def makeCompleteGraph(size):
     return graph
 
 # the following function generates a double star graph
-def makeDoubleStarGraph(leftSize, rightSize):
+def makeDoubleStarGraph(leftSize, rightSize, start=1):
     if leftSize == 0 and rightSize == 0:
         return {1: [2], 2: [1]}
 
-    root = 1
     graph = {}
     edges = []
     totalVertices = leftSize + rightSize + 2
-    
-    vertex = 1
-    while vertex < totalVertices+1: # loop over all vertices
-        if vertex == 1: # left root
-            index = 2
-            while index < leftSize+2+1: # loop through the number of vertices on the left side graph + 1 for right neighbor
+
+    vertex = start
+    while vertex < totalVertices+start: # loop over all vertices
+        if vertex == start: # left root
+            index = start+1
+            while index < start+leftSize+2: # loop through the number of vertices on the left side graph + 1 for right neighbor
                 edges.append(index)
                 index += 1
-        elif vertex == leftSize + 2: # right root
-            edges.append(1)
-            index = leftSize + 2 + 1
-            while index < leftSize+rightSize+2+1: # loop through the number of vertices on the left side graph + 1 for left neighbor
+            root = start
+        elif vertex == start+leftSize+1: # right root
+            edges.append(start)
+            index = start+leftSize+2
+            while index < start+leftSize+rightSize+2: # loop through the number of vertices on the left side graph + 1 for left neighbor
                 edges.append(index)
                 index += 1
-            root = leftSize + 2
+            root = start+leftSize+1
         else:
             edges = [root]
-        
+
         kv = {vertex:edges}
         graph.update(kv)
         edges = []
         vertex += 1
-    
+
     # print(graph)
     return graph
 
 # the following function will generates a windmill graph
 # the function takes as parameter the number of blades on the graph
-def makeWindmillGraph(bladeCount):
+def makeWindmillGraph(bladeCount, start=1):
     totalVertexCount = bladeCount * 2 + 1
 
-    root = 1
+    isOdd = True if start % 2 == 1 else False
     graph = {}
     edges = []
     
-    vertex = 1
-    while vertex < totalVertexCount+1: # loop over all vertices
-        if vertex == 1: # root
-            index = 2
-            while index < totalVertexCount+1: # loop through the total number of vertices on the graph
+    vertex = start
+    while vertex < totalVertexCount+start: # loop over all vertices
+        if vertex == start: # root
+            index = start+1
+            while index < totalVertexCount+start: # loop through the total number of vertices on the graph
                 edges.append(index)
                 index += 1
         elif vertex % 2 == 0: # even vertex
-            edges = [root, vertex+1]
-        elif vertex % 2 == 1: # even vertex
-            edges = [root, vertex-1]
+            edges = [start, vertex+1 if isOdd else vertex-1]
+        elif vertex % 2 == 1: # odd vertex
+            edges = [start, vertex-1 if isOdd else vertex+1]
         
         kv = {vertex:edges}
         graph.update(kv)
@@ -217,13 +217,13 @@ def makeWindmillGraph(bladeCount):
     return graph
 
 # the following function generates a caterpillar graph
-def makeCaterpillarGraph(pendants):
+def makeCaterpillarGraph(pendants, start=1):
     size = len(pendants)
-    graph = makePathGraph(size)
+    graph = makePathGraph(size, start)
 
-    index = size
-    for vertex in range(1, size+1):
-        for i in range(1, pendants[vertex-1] + 1):
+    index = size+start-1
+    for vertex in range(start, size+start):
+        for i in range(1, pendants[vertex-start] + 1):
             index += 1
             graph[vertex].append(index)
             kv = {index:[vertex]}
@@ -233,29 +233,29 @@ def makeCaterpillarGraph(pendants):
     return graph
 
 # the following function generates a lollipop graph
-def makeLollipopGraph(completeSize, stemSize):
+def makeLollipopGraph(completeSize, stemSize, start=1):
     if completeSize == 1 and stemSize == 1:
-        return {1: [2], 2: [1]}
+        return {start: [start+1], start+1: [start]}
 
-    complete = makeCompleteGraph(completeSize)
+    complete = makeCompleteGraph(completeSize, start)
 
     if stemSize == 0:
         return complete
 
-    path = makePathGraph(stemSize, completeSize+1)
+    path = makePathGraph(stemSize, completeSize+start)
 
     # remove the extra node on the complete graph or path graph on size one
     if completeSize == 1:
-        complete.pop(completeSize+1)
+        complete.pop(start+1)
     if stemSize == 1:
-        path.pop(completeSize+2)
-        path[completeSize+1].remove(completeSize+2)
+        path.pop(completeSize+start+1)
+        path[completeSize+start].remove(completeSize+start+1)
 
     # do not append an extra node to the first node on size one
     if completeSize != 1:
-        complete[1].append(completeSize+1)
+        complete[start].append(completeSize+start)
 
-    path[completeSize+1].append(1)
+    path[completeSize+start].append(start)
 
     graph = {**complete, **path}
 
@@ -263,27 +263,27 @@ def makeLollipopGraph(completeSize, stemSize):
     return graph
 
 # the following function generates a house graph
-def makeHouseGraph():
-    graph = makeCircleGraph(5)
+def makeHouseGraph(start=1):
+    graph = makeCircleGraph(5, start)
 
-    graph[5].append(2)
-    graph[2].append(5)
+    graph[start+4].append(start+1)
+    graph[start+1].append(start+4)
 
     # print(graph)
     return graph
 
 # the following function generates a house x-graph
-def makeHouseXGraph():
-    graph = makeCircleGraph(5)
+def makeHouseXGraph(start=1):
+    graph = makeCircleGraph(5, start)
 
-    graph[5].append(2)
-    graph[2].append(5)
+    graph[start+4].append(start+1)
+    graph[start+1].append(start+4)
 
-    graph[2].append(4)
-    graph[4].append(2)
+    graph[start+1].append(start+3)
+    graph[start+3].append(start+1)
 
-    graph[3].append(5)
-    graph[5].append(3)
+    graph[start+2].append(start+4)
+    graph[start+4].append(start+2)
 
     # print(graph)
     return graph
@@ -330,20 +330,20 @@ def makeGridGraph(row, column, start=1):
     return graph
 
 # the following function generates a mongolian tent graph
-def makeMongolianTentGraph(row, column):
+def makeMongolianTentGraph(row, column, start=1):
     if row < 2 or column < 3:
-        raise ValueError
+        raise ValueError("grid size cannot be smaller than a 2 x 3")
     if column % 2 == 0:
-        raise ValueError
+        raise ValueError("column integer {} cannot be even".format(column))
 
-    graph = makeGridGraph(row, column, 2)
+    graph = makeGridGraph(row, column, start+1)
 
-    # the extra vertex (vertex 1) connects to the even vertices of the first row
-    vertex = {1:[]}
+    # the extra vertex (vertex "start") connects to every other vertex starting from the first one of the first row
+    vertex = {start:[]}
 
-    for v in range(2, column+2, 2):
-        vertex[1].append(v)
-        graph[v].append(1)
+    for v in range(start+1, column+start+1, 2):
+        vertex[start].append(v)
+        graph[v].append(start)
 
     graph.update(vertex)
 
