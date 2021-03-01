@@ -350,6 +350,54 @@ def makeMongolianTentGraph(row, column, start=1):
     # print(graph)
     return graph
 
+# the following function gets an integer between begin and end
+# after traversing a certain number of steps either forwards or backwards
+def getListVertex(vertex, begin, end, step):
+    value = vertex + step
+
+    if value <= begin-1:
+        distance = begin - value - 1
+        value = end - distance
+    elif value >= end+1:
+        distance = end - value + 1
+        value = begin - distance
+
+    return value
+
+# the following function generates a generalized petersen graph
+def makeGeneralizedPetersenGraph(size, step, start=1):
+    if size < 3:
+        raise ValueError("Size must be greater than or equal to 3")
+
+    upperStepBound = int((size - 1) / 2)
+    if (step < 1) or (step > upperStepBound):
+        raise ValueError("This value must be an integer value between [1, {}] inclusive".format(upperStepBound))
+
+    inner = None
+    outer = makeCircleGraph(size, start)
+
+    if step == 1:
+        inner = makeCircleGraph(size, start+size)
+    else:
+        inner = {}
+        vertex = start + size
+        while vertex < start+2*size:
+            # create a list containing two values obtained by counting forwards and backwards in the graph by the step size
+            edge = [getListVertex(vertex, start+size, start+size+size-1, step), getListVertex(vertex, start+size, start+size+size-1, -step)]
+            inner.update({vertex:edge})
+            edge = []
+            vertex += 1
+
+    # connect the outer vertices to the inner vertices
+    for v in outer:
+        outer[v].append(v+size)
+        inner[v+size].append(v)
+
+    graph = {**inner, **outer}
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager

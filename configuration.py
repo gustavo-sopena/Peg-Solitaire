@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -21,6 +21,7 @@ parser.add_argument('--bladeCount', type=int, help="the number of blades for the
 parser.add_argument('--pendants', type=int, nargs='+', help="the list of pendants for the caterpillar graph", metavar='p', default=[0, 0, 0])
 parser.add_argument('--stemSize', type=int, help="the number of vertices for the stem of the lollipop graph", metavar='m', default=1)
 parser.add_argument('--gridSize', type=int, nargs=2, help="the number of vertices of the grid graph and mongolian tent graph", metavar=('n','m'), default=[2, 3])
+parser.add_argument('--step', type=int, help="the kth vertex pattern of the inner part of the petersen graph", metavar='k', default=1)
 parser.add_argument('--range', type=int, nargs=2, help="the numbered games to play: [a, b]", metavar=('a','b'))
 parser.add_argument('--dry-run', action="store_true", help="simulate playing the game")
 args = parser.parse_args()
@@ -85,6 +86,11 @@ if typeDescriptive == 'tent':
     typeCompact = 't'
     sizeDescription = str(args.gridSize[0])+'-'+str(args.gridSize[1])
     G = factory.makeMongolianTentGraph(args.gridSize[0], args.gridSize[1])
+if typeDescriptive == 'petersen':
+    size = args.size * 2
+    typeCompact = 'gp'
+    sizeDescription = str(args.size)+'-'+str(args.step)
+    G = factory.makeGeneralizedPetersenGraph(args.size, args.step)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size
