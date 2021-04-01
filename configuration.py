@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -91,6 +91,11 @@ if typeDescriptive == 'petersen':
     typeCompact = 'gp'
     sizeDescription = str(args.size)+'-'+str(args.step)
     G = factory.makeGeneralizedPetersenGraph(args.size, args.step)
+if typeDescriptive == 'barbell':
+    size = args.size * 2
+    typeCompact = 'b'
+    sizeDescription = str(args.size)
+    G = factory.makeBarbellGraph(args.size)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size

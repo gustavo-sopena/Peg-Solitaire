@@ -168,6 +168,7 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeGridGraph(row, column)` for a grid graph
 * `makeMongolianTentGraph(row, column)` for a mongolian tent graph
 * `makeGeneralizedPetersenGraph(size, step)` for a generalized petersen graph
+* `makeBarbellGraph(bellSize)` for a barbell graph
 
 For example,
 ```

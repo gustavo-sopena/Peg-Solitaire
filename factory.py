@@ -398,6 +398,19 @@ def makeGeneralizedPetersenGraph(size, step, start=1):
     # print(graph)
     return graph
 
+# the following function generates a barbell graph
+def makeBarbellGraph(bellSize, start=1):
+    leftBell = makeCompleteGraph(bellSize, start)
+    rightBell = makeCompleteGraph(bellSize, bellSize+start)
+
+    leftBell[start].append(bellSize+start)
+    rightBell[bellSize+start].append(start)
+
+    graph = {**leftBell, **rightBell}
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
