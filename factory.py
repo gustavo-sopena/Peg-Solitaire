@@ -411,6 +411,66 @@ def makeBarbellGraph(bellSize, start=1):
     # print(graph)
     return graph
 
+# the following function generates a star graph
+def makeStarGraph(size, start=1):
+    if size < 2:
+        raise ValueError("Size must be greater than or equal to 2")
+
+    graph = makeCaterpillarGraph([size-1], start)
+
+    # print(graph)
+    return graph
+
+# the following function generates a gear graph
+def makeGearGraph(size, start=1):
+    if size < 3:
+        raise ValueError("Size must be greater than or equal to 3")
+
+    outer = makeCircleGraph(2*size, start)
+
+    center = {start+2*size:[]}
+
+    # loop over all the other vertices and connect them to the first one
+    vertex = start
+    while vertex < start+2*size:
+        outer[vertex].append(start+2*size)
+        center[start+2*size].append(vertex)
+        vertex += 2
+
+    graph = {**center, **outer}
+
+    # print(graph)
+    return graph
+
+# the following function generates a fire cracker graph
+def makeFirecrackerGraph(starCount, starSize, start=1):
+    if starCount < 2:
+        raise ValueError("The star count must be greater than 1")
+
+    if starSize < 2:
+        raise ValueError("The star size must be grater than 1")
+
+    graph = {}
+
+    mStar = makeStarGraph(starSize, start)
+    graph.update(mStar)
+
+    for i in range(1, starCount):
+        if i == 1:
+            pStar = mStar
+        else:
+            pStar = cStar
+
+        cStar = makeStarGraph(starSize, i*starSize+start)
+
+        pStar[(i-1)*starSize+(start+1)].append(i*starSize+(start+1))
+        cStar[i*starSize+(start+1)].append((i-1)*starSize+(start+1))
+
+        graph.update(cStar)
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager

@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell, gear, firecracker, star", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell', 'gear', 'firecracker', 'star'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -22,6 +22,7 @@ parser.add_argument('--pendants', type=int, nargs='+', help="the list of pendant
 parser.add_argument('--stemSize', type=int, help="the number of vertices for the stem of the lollipop graph", metavar='m', default=1)
 parser.add_argument('--gridSize', type=int, nargs=2, help="the number of vertices of the grid graph and mongolian tent graph", metavar=('n','m'), default=[2, 3])
 parser.add_argument('--step', type=int, help="the kth vertex pattern of the inner part of the petersen graph", metavar='k', default=1)
+parser.add_argument('--starShape', type=int, nargs=2, help="the count and size of the stars of the firecracker graph", metavar=('n','k'), default=[2,2])
 parser.add_argument('--range', type=int, nargs=2, help="the numbered games to play: [a, b]", metavar=('a','b'))
 parser.add_argument('--dry-run', action="store_true", help="simulate playing the game")
 args = parser.parse_args()
@@ -96,6 +97,21 @@ if typeDescriptive == 'barbell':
     typeCompact = 'b'
     sizeDescription = str(args.size)
     G = factory.makeBarbellGraph(args.size)
+if typeDescriptive == 'gear':
+    size = args.size * 2 + 1
+    typeCompact = 'gr'
+    sizeDescription = str(args.size)
+    G = factory.makeGearGraph(args.size)
+if typeDescriptive == 'firecracker':
+    size = args.starShape[0] * args.starShape[1]
+    typeCompact = 'fc'
+    sizeDescription = str(args.starShape[0])+'-'+str(args.starShape[1])
+    G = factory.makeFirecrackerGraph(args.starShape[0], args.starShape[1])
+if typeDescriptive == 'star':
+    size = args.size
+    typeCompact = 's'
+    sizeDescription = str(args.size)
+    G = factory.makeStarGraph(args.size)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size
