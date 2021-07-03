@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell, gear, firecracker, star", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell', 'gear', 'firecracker', 'star'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell, gear, firecracker, star, web", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell', 'gear', 'firecracker', 'star', 'web'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -112,6 +112,11 @@ if typeDescriptive == 'star':
     typeCompact = 's'
     sizeDescription = str(args.size)
     G = factory.makeStarGraph(args.size)
+if typeDescriptive == 'web':
+    size = args.size * args.size
+    typeCompact = 'wb'
+    sizeDescription = str(args.size)
+    G = factory.makeWebGraph(args.size)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size

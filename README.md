@@ -172,6 +172,7 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeGearGraph(size)` for a gear graph
 * `makeFirecrackerGraph(starCount, starSize)` for a firecracker graph
 * `makeStarGraph(size)` for a star graph
+* `makeWebGraph(size)` for a web graph
 
 For example,
 ```

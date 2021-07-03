@@ -471,6 +471,29 @@ def makeFirecrackerGraph(starCount, starSize, start=1):
     # print(graph)
     return graph
 
+# the following function generates a web graph
+def makeWebGraph(size, start=1):
+    if size < 3:
+        raise ValueError("The size must be greater than 3")
+
+    inner = makeCircleGraph(size, start)
+    outer = makeCircleGraph(size, start+size)
+
+    # there are going to be "size" lone vertices
+    # connect the outer circle to the inner circle and vice versa
+    # connect the lone vertices to the outer circle and vice versa
+    for v in range(start+size, start+2*size):
+        outer[v].append(v-size)
+        inner[v-size].append(v)
+        vertex = {v+size:[v]}
+        outer[v].append(v+size)
+        outer.update(vertex)
+
+    graph = {**inner, **outer}
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
