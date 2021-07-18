@@ -113,7 +113,7 @@ if typeDescriptive == 'star':
     sizeDescription = str(args.size)
     G = factory.makeStarGraph(args.size)
 if typeDescriptive == 'web':
-    size = args.size * args.size
+    size = 3 * args.size
     typeCompact = 'wb'
     sizeDescription = str(args.size)
     G = factory.makeWebGraph(args.size)
