@@ -3,7 +3,7 @@
 # author: Gustavo Sopena
 # date started: Thursday: July 5, 2019
 
-import PegGame
+import game
 import factory
 import xlsxwriter
 # import math
@@ -13,10 +13,10 @@ import xlsxwriter
 # set the number of vertices for the graph (int)
 # set the type of graph (string)
 # for now, options are: circle, path
-n = 3
+n = game.n = 3
 size = 5
 type = 'path'
-G = factory.makeGraph(size, type)
+G = factory.makePathGraph(size)
 
 # set the configuration for the graph
 C = {1:0, 2:1, 3:1, 4:1, 5:1}
@@ -47,7 +47,7 @@ factory.writeConfigurationToSheet(C, row, worksheet)
 row += 1
 
 # play the game
-result, graph, sequence, seen = PegGame.winnable(G, C)
+result, sequence, seen = game.is_winnable(G, C)
 
 # show if the game won
 print("Win: "+str(result))
