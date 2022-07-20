@@ -173,6 +173,7 @@ Graphs are made by using the appropriate function from factory<span></span>.py:
 * `makeFirecrackerGraph(starCount, starSize)` for a firecracker graph
 * `makeStarGraph(size)` for a star graph
 * `makeWebGraph(size)` for a web graph
+* `makeTreeGraphs(size)` for a tree graph
 
 For example,
 ```
@@ -199,7 +200,6 @@ Then, submit a pull request!
 
 * Build a family of "make graph" functions by adding the ability to make:
 
-    * Tree Graphs
     * (Complete) Bipartite Graphs
 
 ### Bugs + Issues

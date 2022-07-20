@@ -12,7 +12,7 @@ import sys
 # setup the argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', action="store_true", help="switch to a descriptive file name: i.e. 'ps.xlsx' to 'peg-solitaire.xlsx'")
-parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell, gear, firecracker, star, web", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell', 'gear', 'firecracker', 'star', 'web'], required=True)
+parser.add_argument('-t', '--type', type=str, help="the type of graph to use: path, circle, windmill, doublestar, caterpillar, lollipop, complete, house, house-x, grid, tent, petersen, barbell, gear, firecracker, star, web, tree", metavar='type', choices=['path', 'circle', 'windmill', 'doublestar', 'caterpillar', 'lollipop', 'complete', 'house', 'house-x', 'grid', 'tent', 'petersen', 'barbell', 'gear', 'firecracker', 'star', 'web', 'tree'], required=True)
 parser.add_argument('-s', '--size', type=int, help="the number of vertices for the graph", metavar='size', default=3)
 parser.add_argument('-n', '--colorset', type=int, help="the color set: Z_n = (0, 1, ..., n-1) (default: 3)", metavar='n', default=3)
 parser.add_argument('--leftSize', type=int, help="the number of vertices for the left side of the double star graph", metavar='L', default=0)
@@ -23,6 +23,7 @@ parser.add_argument('--stemSize', type=int, help="the number of vertices for the
 parser.add_argument('--gridSize', type=int, nargs=2, help="the number of vertices of the grid graph and mongolian tent graph", metavar=('n','m'), default=[2, 3])
 parser.add_argument('--step', type=int, help="the kth vertex pattern of the inner part of the petersen graph", metavar='k', default=1)
 parser.add_argument('--starShape', type=int, nargs=2, help="the count and size of the stars of the firecracker graph", metavar=('n','k'), default=[2,2])
+parser.add_argument('--roots', type=int, nargs='+', help="the list of root nodes (keys) and subnodes (values) pairs for the tree graph: e.g.,[1, 2]", metavar=('r'), default=[1, 2])
 parser.add_argument('--range', type=int, nargs=2, help="the numbered games to play: [a, b]", metavar=('a','b'))
 parser.add_argument('--dry-run', action="store_true", help="simulate playing the game")
 args = parser.parse_args()
@@ -84,7 +85,7 @@ if typeDescriptive == 'grid':
     G = factory.makeMongolianTentGraph(args.gridSize[0], args.gridSize[1])
 if typeDescriptive == 'tent':
     size = args.gridSize[0] * args.gridSize[1] + 1
-    typeCompact = 't'
+    typeCompact = 'tn'
     sizeDescription = str(args.gridSize[0])+'-'+str(args.gridSize[1])
     G = factory.makeMongolianTentGraph(args.gridSize[0], args.gridSize[1])
 if typeDescriptive == 'petersen':
@@ -117,6 +118,13 @@ if typeDescriptive == 'web':
     typeCompact = 'wb'
     sizeDescription = str(args.size)
     G = factory.makeWebGraph(args.size)
+if typeDescriptive == 'tree':
+    it = iter(args.roots)
+    args.roots = dict(zip(it, it))
+    size = sum(args.roots.values()) + 1
+    typeCompact = 't'
+    sizeDescription = str(list(args.roots.keys())).replace('[', '').replace(']', '').replace(', ', '-')
+    G = factory.makeTreeGraph(args.roots)
 
 # set the total number of games
 totalGames = ((n-1) ** (size-1)) * size

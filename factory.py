@@ -494,6 +494,39 @@ def makeWebGraph(size, start=1):
     # print(graph)
     return graph
 
+# the following function generates a tree graph
+def makeTreeGraph(roots, start=1):
+    if not roots:
+        raise ValueError("The roots dictionary must contain at least one root node")
+
+    graph = {}
+
+    ln = 0
+    d = 0
+    
+    # loop over the root nodes and the associated number of subnodes
+    for r,n in roots.items():
+        if r != start:
+            d = ln - r
+
+        # top-down connection
+        subtree = {r:[r+i + d for i in range(1, n+1)]}
+
+        # bottom-up connection
+        subtree.update({r+i + d:[r] for i in range(1, n+1)})
+
+        # check if root value exists in tree graph
+        if r != start and graph[r]:
+            graph[r].extend(subtree.pop(r))
+
+        graph.update(subtree)
+        subtree.clear()
+
+        ln = r+n + d
+
+    # print(graph)
+    return graph
+
 # the following function will time how long a block of code took to execute
 # the time is logged to the results screen and to the excel file
 @contextlib.contextmanager
