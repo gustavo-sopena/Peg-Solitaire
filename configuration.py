@@ -82,7 +82,7 @@ if typeDescriptive == 'grid':
     size = args.gridSize[0] * args.gridSize[1]
     typeCompact = 'g'
     sizeDescription = str(args.gridSize[0])+'-'+str(args.gridSize[1])
-    G = factory.makeMongolianTentGraph(args.gridSize[0], args.gridSize[1])
+    G = factory.makeGridGraph(args.gridSize[0], args.gridSize[1])
 if typeDescriptive == 'tent':
     size = args.gridSize[0] * args.gridSize[1] + 1
     typeCompact = 'tn'

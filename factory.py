@@ -127,7 +127,7 @@ def makeCircleGraph(size, start=1):
     # print(graph)
     return graph
 
-# the folllowing function generates a complete graph
+# the following function generates a complete graph
 def makeCompleteGraph(size, start=1):
     graph = makeCircleGraph(size, start)
 
@@ -228,6 +228,9 @@ def makeCaterpillarGraph(pendants, start=1):
             graph[vertex].append(index)
             kv = {index:[vertex]}
             graph.update(kv)
+
+    if size == 1:
+        graph[start].remove(start+1)
 
     # print(graph)
     return graph
