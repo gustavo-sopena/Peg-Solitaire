@@ -272,6 +272,14 @@ with factory.stopwatch(worksheet, workbook.add_format(right)):
             worksheet.write(row, 1, str(result), factory.makeSheetCellFormat(workbook, bold, right))
             row += 1
 
+            # write the vertex labels for the graph, if game is winnable
+            if result == True:
+                worksheet.set_row(row, cell_format=factory.makeSheetCellFormat(workbook, border, borderColor, right))
+                for vertex in range(1, size+1):
+                    worksheet.write(row, vertex-1, "vertex: "+str(vertex))
+
+                row += 1
+
             # show series of moves that won the game, if any
             for c in sequence:
                 factory.writeConfigurationToSheet(c, row, worksheet)
